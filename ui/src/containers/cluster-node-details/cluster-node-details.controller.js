@@ -18,6 +18,8 @@ class clusterNodeDetailsController {
     this.service.getNodeStats(this.clusterName, this.nodeId).then((resp) => {
       console.log('--- node stats: ', resp.data.data)
       this.stats = resp.data.data[0].nodes[this.nodeId];
+      this.stats.tasks = resp.data.data[0].tasks
+      console.log('--- task stats: ', this.stats)
     })
   }
 }

@@ -20,8 +20,11 @@ class clusterSummaryController {
         let masterArr = [];
         const formatNum = '0[.][0][0] a';
         const formatByt = '0[.][0][0] b';
-        console.log('---- summary: ', this);
         this.firstRow = [
+            {
+                label: 'Status',
+                value: this.summary.status
+            },
             {
                 label: 'Nodes',
                 value: numeral(this.summary.number_of_nodes).format(formatNum)
@@ -38,7 +41,6 @@ class clusterSummaryController {
                 label: 'Size',
                 value: numeral(this.summary.indices_size_in_bytes).format(formatByt)
             }
-
         ];
 
         this.secondRow = [

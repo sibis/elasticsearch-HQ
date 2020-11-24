@@ -1,0 +1,21 @@
+<div class="node-tasks-info-table ">
+  <h4>Tasks</h4>
+  <table class="table table-condensed table-hover table-striped">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Start time</th>
+        <th>Running time</th>
+        <th>Cancellable</th>
+      </tr>
+      </thead>
+    <tbody>
+    <tr ng-repeat="data in nodeTasksInfoTableCtrl.info.tasks">
+      <td>{{data.type}}</td>
+      <td>{{data.start_time_in_millis | date:'dd/MM/yyyy' }}</td>
+      <td>{{data.running_time_in_nanos}}</td>
+      <td>{{data.cancellable}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

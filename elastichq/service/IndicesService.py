@@ -126,6 +126,10 @@ class IndicesService:
     def get_shards(self, cluster_name, index_name):
         connection = ConnectionService().get_connection(cluster_name)
         shards = connection.cat.shards(index=index_name, format='json')
+        shardStatus = connection.cluster.health(index=index_name,level='shards', format='json')   
+        val = shardStatus['indices'][index_name]['shards']
+        for data in shards:
+            data['status'] = val[data['shard']]['status']
         return shards
 
     def expunge_deleted(self, cluster_name, index_name):

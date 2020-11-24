@@ -1,5 +1,5 @@
 <div class="index-metric-search ">
-    <h4>Search Totals</h4>
+    <h4>Search Totals</h4> 
     <table class="table table-condensed table-hover table-striped">
         <thead>
             <tr>
@@ -13,8 +13,16 @@
                 <td>{{indexMetricSearchCtrl.stats.total.search.query_total | numeral: '0[,][0]'}}</td>
             </tr>
             <tr>
+                <td>Query Time(ms)</td>
+                <td>{{indexMetricSearchCtrl.stats.total.search.query_time_in_millis | numeral: '0[,][0]'}}</td>
+            </tr>
+            <tr>
                 <td>Fetch Total</td>
                 <td>{{indexMetricSearchCtrl.stats.total.search.fetch_total | numeral: '0[,][0]'}}</td>
+            </tr>
+            <tr>
+                <td>Fetch Time(ms)</td>
+                <td>{{indexMetricSearchCtrl.stats.total.search.fetch_time_in_millis | numeral: '0[,][0]'}}</td>
             </tr>
             <tr>
                 <td>Scroll Total</td>

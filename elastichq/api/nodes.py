@@ -6,7 +6,7 @@ from . import api
 from ..common.api_response import APIResponse
 from ..common.exceptions import request_wrapper
 from ..common.status_codes import HTTP_Status
-from ..service import NodeService
+from ..service import NodeService, ClusterService
 
 
 class NodesSummary(Resource):
@@ -30,6 +30,10 @@ class NodesStats(Resource):
         """
 
         response = NodeService().get_node_stats(cluster_name, node_ids)
+        taskdata = ClusterService().get_cluster_tasks(cluster_name)
+        global_tasks = {}
+        taskdata = taskdata['nodes'][node_ids]['tasks']
+        response['tasks'] = taskdata
         return APIResponse(response, HTTP_Status.OK, None)
 
 

@@ -1,4 +1,12 @@
 .index-shards-tab-content .table tbody td {
   font-size: 14px; }
-
+  .index-shards-tab-content .table tbody td.health {
+    padding: 8px 0px;
+    width: 6px; }
+    .index-shards-tab-content .table tbody td.health.green {
+      background: #43ac6a; }
+    .index-shards-tab-content .table tbody td.health.yellow {
+      background: #ffc107; }
+    .index-shards-tab-content .table tbody td.health.red {
+      background: #dc3545; }
 /*# sourceMappingURL=index-shards-tab-content.style.css.map */

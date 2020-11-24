@@ -1,0 +1,29 @@
+<div class="index-metric-segment ">
+    <h4>Segment Information</h4> 
+    <table class="table table-condensed table-hover table-striped">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Total Count</td>
+                <td>{{indexMetricSearchCtrl.stats.total.segments.count | numeral: '0[,][0]'}}</td>
+            </tr>
+            <tr>
+                <td>Total Memory</td>
+                <td>{{indexMetricSearchCtrl.stats.total.segments.memory_in_bytes | numeral: '0[.][0] b'}}</td>
+            </tr>
+            <tr>
+                <td>Terms memory</td>
+                <td>{{indexMetricSearchCtrl.stats.total.segments.terms_memory_in_bytes | numeral: '0[,][0]'}}</td>
+            </tr>
+            <tr>
+                <td>Memory used for documents</td>
+                <td>{{indexMetricSearchCtrl.stats.total.segments.doc_values_memory_in_bytes | numeral: '0[.][0] b'}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

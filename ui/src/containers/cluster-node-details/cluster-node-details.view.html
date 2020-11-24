@@ -7,9 +7,17 @@
     <div class="row">
         <div class="col-md-12">
             <!--<span class="sub-info">Version: {{cNodeDetailsCtrl.info.version}}</span>-->
-            <h4>{{ cNodeDetailsCtrl.info.name}}</h4>
+            <h4>{{ cNodeDetailsCtrl.info.name }}</h4>
+            <!-- <h5><p>{{ cNodeDetailsCtrl.info.settings.cluster.name }}</p></h5> -->
         </div>
     </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <eshq-node-summary-main-table main="cNodeDetailsCtrl.info"></eshq-node-summary-main-table>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-6">
             <eshq-node-summary-info-table info="cNodeDetailsCtrl.info"></eshq-node-summary-info-table>
@@ -36,6 +44,14 @@
         </div>
         <div class="col-md-6">
             <eshq-node-plugins-table plugins="cNodeDetailsCtrl.info.plugins"></eshq-node-plugins-table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <eshq-node-network-stats-table info="cNodeDetailsCtrl.stats"></eshq-node-network-stats-table>
+        </div>
+        <div class="col-md-6">
+            <eshq-node-tasks-info-table info="cNodeDetailsCtrl.stats"></eshq-node-tasks-info-table>
         </div>
     </div>
 </div>

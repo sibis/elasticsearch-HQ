@@ -1,7 +1,7 @@
 <div class="cluster-summary ">
     <div class="row pt-12"></div>
     <div class="row">
-        <div class="col-md-3" ng-repeat="item in clusterSummaryCtrl.firstRow track by $index">
+        <div class="col-md-2" ng-class="{'col-md-offset-1': $first}" ng-repeat="item in clusterSummaryCtrl.firstRow track by $index">
             <div class="panel status panel-info">
                 <div class="panel-heading">
                     <h1 class="panel-title text-center">{{item.value}}</h1>
@@ -24,3 +24,4 @@
         </div>
     </div>
 </div>
+

@@ -2,6 +2,7 @@
     <table class="table table-condensed table-hover" ts-wrapper  ts-per-page-default="10">
         <thead>
             <tr>
+                <th></th>
                 <th ts-criteria="shard">Shard</th>
                 <th ts-criteria="state">State</th>
                 <th ts-criteria="docs"># Docs</th>
@@ -12,6 +13,7 @@
         </thead>
         <tbody>
             <tr ng-repeat="shard in iSTabContentCtrl.shards"  ts-repeat  ts-hide-no-data>
+                <td ng-class="shard.status" class="health"></td>
                 <td>{{shard.shard}}</td>
                 <td>{{shard.state}}</td>
                 <td>{{shard.docs | numeral: '0[.][0] a'}}</td>

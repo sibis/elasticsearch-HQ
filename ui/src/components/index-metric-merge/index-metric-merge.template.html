@@ -1,0 +1,33 @@
+<div class="index-metric-merge ">
+    <h4>Merge operations</h4> 
+    <table class="table table-condensed table-hover table-striped">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+            <tr>
+                <td>Total Document Merges</td>
+                <td>{{indexMetricOpsCtrl.stats.total.merges.total_docs | numeral: '0[,][0]'}}</td>
+            </tr>
+            <tr>
+                <td>Merge Time(ms)</td>
+                <td>{{indexMetricOpsCtrl.stats.total.merges.total_time_in_millis | numeral: '0[,][0]'}}</td>
+            </tr>
+            <tr>
+                <td>Merge Size</td>
+                <td>{{indexMetricOpsCtrl.stats.total.merges.total_size_in_bytes | numeral: '0[.][0] b'}}</td>
+            </tr>
+            <tr>
+                <td>Current Merge Operation</td>
+                <td>{{indexMetricOpsCtrl.stats.total.merges.current | numeral: '0[,][0]'}}</td>
+            </tr>
+            <tr>
+                <td>Total Auto Throttling Size</td>
+                <td>{{indexMetricOpsCtrl.stats.total.merges.total_auto_throttle_in_bytes | numeral: '0[.][0] b'}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

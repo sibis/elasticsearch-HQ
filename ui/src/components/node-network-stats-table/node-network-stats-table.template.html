@@ -1,0 +1,25 @@
+<div class="node-network-stats-table ">
+  <h4>Network Stats</h4>
+  <table class="table table-condensed table-hover table-striped">
+    <thead>
+      <tr>
+        <th>Pool type</th>
+        <th>Threads</th>
+        <th>Queue</th>
+        <th>Active</th>
+        <th>Rejected</th>
+        <th>Completed</th>
+      </tr>
+      </thead>
+    <tbody>
+    <tr ng-repeat="(key,value) in nodeNetworkStatsTableCtrl.info.thread_pool">
+      <td>{{key}}</td>
+      <td>{{value.threads}}</td>
+      <td>{{value.queue}}</td>
+      <td>{{value.active}}</td>
+      <td>{{value.rejected}}</td>
+      <td>{{value.completed}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

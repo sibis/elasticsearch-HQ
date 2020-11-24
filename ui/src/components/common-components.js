@@ -18,6 +18,8 @@ import indexMetricDocs from './index-metric-docs/index-metric-docs';
 import indexMetricHealth from './index-metric-health/index-metric-health';
 import indexMetricGet from './index-metric-get/index-metric-get'
 import indexMetricSearch from './index-metric-search/index-metric-search'
+import indexMetricSegment from './index-metric-segment/index-metric-segment'
+import indexMetricMerge from './index-metric-merge/index-metric-merge'
 import indexMetricIndex from './index-metric-index/index-metric-index'
 import indexMetricQCache from './index-metric-querycache/index-metric-querycache'
 import indexMetricOps from './index-metric-ops/index-metric-ops'
@@ -27,6 +29,8 @@ import indexMappingsTabContent from './index-mappings-tab-content/index-mappings
 
 // Nodes components
 import nodeSummaryInfoTable from './node-summary-info-table/node-summary-info-table';
+import nodeNetworkStatsTable from './node-network-stats-table/node-network-stats-table';
+import nodeTasksInfoTable from './node-tasks-info-table/node-tasks-info-table';
 import nodeFsInfoTable from './node-fs-info-table/node-fs-info-table';
 import nodePluginsTable from './node-plugins-table/node-plugins-table';
 import nodeProcessTable from './node-process-table/node-process-table';
@@ -61,9 +65,13 @@ const CommonComponents = angular.module('components', [
   indexMetricQCache,
   indexMetricOps,
   indexMetricSearch,
+  indexMetricSegment,
+  indexMetricMerge,
   footer,
   nodeDiagnosticsWrapper,
   nodeSummaryInfoTable,
+  nodeNetworkStatsTable,
+  nodeTasksInfoTable,
   nodeFsInfoTable,
   nodePluginsTable,
   nodeProcessTable,
