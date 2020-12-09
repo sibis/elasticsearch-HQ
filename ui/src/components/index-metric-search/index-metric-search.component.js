@@ -4,7 +4,10 @@ import controller from './index-metric-search.controller';
 const indexMetricSearchComponent = {
   bindings: {
     stats: '<',
-    summary: '<'
+    summary: '<',
+    index_rate: '<',
+    search_rate: '<',
+    search_latency: '<'
   },
   template,
   controller,

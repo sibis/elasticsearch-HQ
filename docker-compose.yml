@@ -1,0 +1,25 @@
+version: '3.1'
+  
+services:
+  elasticsearch:
+    image: elasticsearch:7.9.3
+    container_name: elasticsearch_server
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - ./db:/usr/share/elasticsearch/data
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - cluster.name=docker-cluster
+      - discovery.type=single-node
+    depends_on:
+      - redis
+  redis:
+    image: 'redis:latest'
+    ports:
+      - "6379:6379" 
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+
+    

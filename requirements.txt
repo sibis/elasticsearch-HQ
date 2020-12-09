@@ -49,3 +49,6 @@ gunicorn==19.7.1
 # Elasticsearch
 six==1.11.0
 python-dateutil==2.7.2
+
+# Redis
+redis==3.5.3

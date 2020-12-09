@@ -1,5 +1,5 @@
 <div class="index-metric-search ">
-    <h4>Search Totals</h4> 
+    <h4>Search Totals</h4>
     <table class="table table-condensed table-hover table-striped">
         <thead>
             <tr>
@@ -35,6 +35,18 @@
             <tr>
                 <td>Scroll Current Count</td>
                 <td>{{indexMetricSearchCtrl.stats.total.search.scroll_current | numeral: '0[,][0]'}}</td>
+            </tr>
+            <tr>
+                <td>Index Rate</td>
+                <td>{{indexMetricSearchCtrl.stats.index_rate}}</td>
+            </tr>
+            <tr>
+                <td>Search Rate</td>
+                <td>{{indexMetricSearchCtrl.stats.search_rate}}</td>
+            </tr>
+            <tr>
+                <td>Search Latency</td>
+                <td>{{indexMetricSearchCtrl.stats.search_latency}}</td>
             </tr>
         </tbody>
     </table>

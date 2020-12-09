@@ -2,10 +2,17 @@
 import logging.config
 import optparse
 import os
+import threading
 
 from elastichq import create_app
 from elastichq.globals import socketio
 from elastichq.utils import find_config
+from elastichq.service import IndicesService, ClusterService
+from elastichq.model import ClusterDTO
+
+import schedule
+import time
+import redis
 
 default_host = '0.0.0.0'
 default_port = 5000
@@ -17,8 +24,9 @@ default_client_key = None
 default_client_cert = None
 default_url = 'http://localhost:9200'
 is_gunicorn = "gunicorn" in os.environ.get("SERVER_SOFTWARE", "")
+default_redisurl = 'redis://redis:6379'
 
-application = create_app()
+application = create_app() 
 
 # set default url, override with env for docker
 application.config['DEFAULT_URL'] = os.environ.get('HQ_DEFAULT_URL', default_url)
@@ -33,7 +41,53 @@ if os.environ.get('HQ_DEBUG') == 'True':
     config = find_config('logger_debug.json')
     logging.config.dictConfig(config)
 
+def job():
+    r = redis.Redis(host='localhost', port=6379, decode_responses=True)
+
+    clusters = ClusterService().get_clusters()
+    schema = ClusterDTO(many=True)
+    result = schema.dump(clusters)
+    for cluster in result.data:
+        res = IndicesService().get_indices_stats(cluster['cluster_name'], None)
+        for name, val in res['indices'].items():
+            cons_name = 'prev:'+cluster['cluster_name']+':'+name
+            ongoing_name = cluster['cluster_name']+':'+name
+            try:
+                prev_search_latency = ((val['total']['search']['query_total']/val['total']['search']['query_time_in_millis']) - int(prev_rate[2])) / 60
+            except ZeroDivisionError:
+                prev_search_latency = 0
+            # format - index_total : search_total : search_time/search_count
+            result = str(val['total']['indexing']['index_total'])+':'+str(val['total']['search']['query_total'])+':'+str(prev_search_latency)
+            if r.get(cons_name) is None:
+                r.set(cons_name, result)
+            else:
+                prev_rate = str(r.get(cons_name))
+                r.set(cons_name, result)
+                
+                prev_rate = prev_rate.split(":")
+                current_index_rate = (float(val['total']['indexing']['index_total']) - float(prev_rate[0])) / 60
+                current_search_total = (float(val['total']['search']['query_total']) - float(prev_rate[1])) / 60
+                try:
+                    current_search_latency = ((float(val['total']['search']['query_total'])/float(val['total']['search']['query_time_in_millis'])) - float(prev_rate[2])) / 60
+                except ZeroDivisionError:
+                    current_search_latency = 0
+                # derivative of the total search time by the derivative of the total search count - search latency
+                ongoing_result = str(current_index_rate)+':'+str(current_search_total)+':'+str(current_search_latency)
+                r.set(ongoing_name, ongoing_result)
+                
+
+
+def start_scheduler():
+    schedule.every(1).minutes.do(job)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+    
 if __name__ == '__main__':
+    #start_scheduler()
+    download_thread = threading.Thread(target=start_scheduler, name="Downloader", args="")
+    download_thread.start()
+
     # Set up the command-line options
     parser = optparse.OptionParser()
     parser.add_option("-H", "--host",

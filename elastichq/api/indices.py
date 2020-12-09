@@ -5,6 +5,7 @@
 """
 
 import jmespath
+import redis
 from flask import request
 from flask_restful import Resource
 
@@ -28,7 +29,7 @@ class IndexSummary(Resource):
         response = IndicesService().get_indices_summary(cluster_name, index_names)
         return APIResponse(response, HTTP_Status.OK, None)
 
-
+ 
 class IndexStats(Resource):
     @request_wrapper
     def get(self, cluster_name, index_names=None):
@@ -39,7 +40,23 @@ class IndexStats(Resource):
         :param index_names:
         :return:
         """
+        print("----------- alright got it here, bro ------------")
         response = IndicesService().get_indices_stats(cluster_name, index_names)
+        if index_names is not None:
+            r = redis.Redis(host='localhost', port=6379, decode_responses=True)
+            search_stats = r.get(cluster_name+':'+index_names)
+            if search_stats is not None:
+                search_stats = search_stats.split(":")
+                print("-------------- **************************** ---------------")
+                print(search_stats)
+                print("-------------- **************************** ---------------")
+                index_rate = float(search_stats[0])
+                search_rate = float(search_stats[1])
+                search_latency = float(search_stats[2])
+                response["index_rate"] = float("{0:.2f}".format(index_rate))
+                response["search_rate"] = float("{0:.2f}".format(search_rate))
+                response["search_latency"] = float("{0:.2f}".format(search_latency))
+                print(response)
         return APIResponse(response, HTTP_Status.OK, None)
 
 

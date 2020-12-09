@@ -41,8 +41,15 @@ class clusterIndiceDetailsController {
         })
 
         this.ClusterIndices.clusterIndiceStats(this.clusterName, this.indexName).then((resp) => {
+            console.log('------- sibi stats log ---------')
+            console.log(resp)
             this.stats = resp.data.data[0]._all;
+
+            
             this.setRows();
+            this.stats.index_rate = resp.data.data[0].index_rate
+            this.stats.search_rate = resp.data.data[0].search_rate
+            this.stats.search_latency = resp.data.data[0].search_latency
         })
 
     }
