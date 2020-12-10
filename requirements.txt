@@ -52,3 +52,4 @@ python-dateutil==2.7.2
 
 # Redis
 redis==3.5.3
+schedule

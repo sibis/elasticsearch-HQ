@@ -22,7 +22,7 @@ default_ca_certs = None
 default_verify_certs = True
 default_client_key = None
 default_client_cert = None
-default_url = 'http://localhost:9200'
+default_url = 'https://admin:admin@localhost:9200'
 is_gunicorn = "gunicorn" in os.environ.get("SERVER_SOFTWARE", "")
 default_redisurl = 'redis://redis:6379'
 
@@ -43,7 +43,7 @@ if os.environ.get('HQ_DEBUG') == 'True':
 
 def job():
     r = redis.Redis(host='localhost', port=6379, decode_responses=True)
-
+   
     clusters = ClusterService().get_clusters()
     schema = ClusterDTO(many=True)
     result = schema.dump(clusters)
@@ -52,8 +52,11 @@ def job():
         for name, val in res['indices'].items():
             cons_name = 'prev:'+cluster['cluster_name']+':'+name
             ongoing_name = cluster['cluster_name']+':'+name
+
+            prev_rate = str(r.get(cons_name))
+            prev_rate = prev_rate.split(":")
             try:
-                prev_search_latency = ((val['total']['search']['query_total']/val['total']['search']['query_time_in_millis']) - int(prev_rate[2])) / 60
+                prev_search_latency = (float(val['total']['search']['query_total']/val['total']['search']['query_time_in_millis']) - float(prev_rate[2])) / 60
             except ZeroDivisionError:
                 prev_search_latency = 0
             # format - index_total : search_total : search_time/search_count
