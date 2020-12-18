@@ -21,5 +21,14 @@ services:
       - "6379:6379" 
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432" 
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=applog
+      - POSTGRES_USER=postgres
 
     
