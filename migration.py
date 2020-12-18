@@ -19,7 +19,7 @@ import psycopg2
 
 #establishing the connection
 conn = psycopg2.connect(
-   database="postgres", user='postgres', password='password', host='127.0.0.1', port= '5432'
+   database="elastic_HQ", user='elastichq_admin', password='elasticHQ@321', host='127.0.0.1', port= '5432'
 )
 conn.autocommit = True
 
