@@ -53,3 +53,4 @@ python-dateutil==2.7.2
 # Redis
 redis==3.5.3
 schedule
+psycopg2==2.7.6

@@ -10,6 +10,8 @@ from elastichq.utils import find_config
 from elastichq.service import IndicesService, ClusterService
 from elastichq.model import ClusterDTO
 
+from stats_handler import persist_elastic_search
+
 import schedule
 import time
 import redis
@@ -81,7 +83,8 @@ def job():
 
 
 def start_scheduler():
-    schedule.every(1).minutes.do(job)
+    schedule.every(10).minutes.do(job)
+    schedule.every(15).minute.do(persist_elastic_search)
     while True:
         schedule.run_pending()
         time.sleep(1)

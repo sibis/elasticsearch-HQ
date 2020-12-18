@@ -15,6 +15,7 @@ from ..common.exceptions import BadRequest, request_wrapper
 from ..common.status_codes import HTTP_Status
 from ..service import ClusterService, ConnectionNotAuthorized, ConnectionService
 
+import psycopg2, json
 
 class ClusterConnection(Resource):
     """
@@ -355,6 +356,90 @@ class ClusterSettings(Resource):
         return APIResponse(response, HTTP_Status.OK, None)
 
 
+def dbConnect():
+    conn = psycopg2.connect(
+            database="postgres", user='postgres', password='password', host='127.0.0.1', port= '5432'
+        )
+    conn.autocommit = True
+    return conn
+
+class PersistentClusterInformation(Resource):
+
+    @request_wrapper
+    def get(self):
+        conn = dbConnect()
+        cursor = conn.cursor()
+        cursor.execute('''SELECT * from cluster''')
+        clusters = cursor.fetchall()
+        conn.close()
+
+        res = []
+        
+        for row in clusters:
+            val = {}
+            val['id'] = row[0]
+            val['name'] = row[4]
+            val['status'] = row[3]
+            val['nodes_count'] = row[1]
+            val['indices_count'] = row[2]
+            val['documents'] = row[5]
+            val['size'] = row[6]
+            res.append(val)
+        rngData = json.dumps(res, sort_keys = True, default = str)
+        return APIResponse(rngData, HTTP_Status.OK, None)
+
+
+class PersistentIndexInformation(Resource):
+
+    @request_wrapper
+    def get(self, cluster_id):
+        conn = dbConnect()
+        cursor = conn.cursor()
+        cursor.execute('''SELECT * from index where cluster_id=%s''', (cluster_id,))
+        clusters = cursor.fetchall()
+        conn.close()
+        res = []
+        for row in clusters:
+            val = {}
+            val['id'] = row[0]
+            val['name'] = row[2]
+            val['docs'] = row[3]
+            val['size'] = row[6]
+            val['cache_size'] = row[7]
+            val['created_at'] = row[8]
+            res.append(val)
+        rngData = json.dumps(res, sort_keys = True, default = str)
+        return APIResponse(rngData, HTTP_Status.OK, None)
+
+
+class PersistentIndexStatsInformation(Resource):
+
+    @request_wrapper
+    def get(self, index_id):
+        date = request.args.get('date')
+        conn = dbConnect()
+        cursor = conn.cursor()
+        cursor.execute('''SELECT * from index_stats where index_id=%s and created_at < %s ORDER BY created_at DESC LIMIT 1;''', (index_id,date,))
+        clusters = cursor.fetchall()
+        conn.close()
+        res = []
+        for row in clusters:
+            val = {}
+            val['documents_size'] = row[2]
+            val['total_docs'] = row[3]
+            val['deleted_docs'] = row[4]
+            val['query_total'] = row[5]
+            val['query_time_in_ms'] = row[6]
+            val['fetch_total'] = row[7]
+            val['fetch_time_in_ms'] = row[8]
+            val['index_rate'] = row[9]
+            val['search_rate'] = row[10]
+            val['search_latency'] = row[11]
+            res.append(val)
+        rngData = json.dumps(res, sort_keys = True, default = str)
+        return APIResponse(rngData, HTTP_Status.OK, None)
+
+
 api.add_resource(ClusterConnection, '/clusters/_connect', '/clusters/<string:cluster_name>/_connect',
                  endpoint='clusters', methods=['POST', 'DELETE'])
 api.add_resource(ClusterList, '/clusters', endpoint='clusters_list', methods=['GET'])
@@ -367,3 +452,12 @@ api.add_resource(ClusterPendingTasks, '/clusters/<string:cluster_name>/_pending_
                  endpoint='clusters_pending_tasks', methods=['GET'])
 api.add_resource(ClusterSettings, '/clusters/<string:cluster_name>/_settings', endpoint='clusters_settings',
                  methods=['GET', 'PUT'])
+
+api.add_resource(PersistentClusterInformation, '/persistent/clusters', endpoint='persistent_clusters_list', methods=['GET'])
+api.add_resource(PersistentIndexInformation, '/persistent/cluster/<int:cluster_id>/indices', endpoint='persistent_index_list', methods=['GET'])
+api.add_resource(PersistentIndexStatsInformation, '/persistent/index/<int:index_id>/stats', endpoint='persistent_index_statss', methods=['GET'])
+
+
+# http://localhost:5000/api/persistent/clusters
+# http://localhost:5000/api/persistent/cluster/1/indices
+# http://localhost:5000/api/persistent/index/1/stats?date=2020-12-17
